@@ -1,0 +1,34 @@
+const fs = require('fs');
+const path = require('path');
+
+// Define la función que se ejecutará en el daemon
+function daemonFunction() {
+  // Lógica del daemon
+  console.log('El daemon se está ejecutando...');
+}
+
+// Verifica si el proceso actual es el daemon o el proceso padre
+if (process.argv[2] === '--daemon') {
+  // Ejecuta la función del daemon en un bucle infinito
+  setInterval(daemonFunction, 1000);
+
+  // Desconecta el proceso del terminal
+  process.stdin.unref();
+  process.stdout.unref();
+  process.stderr.unref();
+} else {
+  // Crea un archivo de marcador para indicar que el daemon está en ejecución
+  fs.writeFileSync(path.join(dirname, 'daemon.marker'), '');
+
+  // Crea un nuevo proceso utilizando fork para ejecutar el mismo script con la opción --daemon
+  const forked = require('child_process').fork(filename, ['--daemon'], {
+    detached: true,
+    stdio: 'ignore',
+  });
+
+  // Desconecta el proceso padre del terminal y finaliza su ejecución
+  process.stdin.unref();
+  process.stdout.unref();
+  process.stderr.unref();
+  process.exit();
+}

@@ -1,0 +1,9 @@
+ponerle nombre
+doble fork https://stackoverflow.com/a/7911144
+salida (y demás) a paths estándar (no tiene terminal)
+¿cambiar pwd? https://stackoverflow.com/a/9956571
+pidfile (ver qué hacer si ya existe) 
+    https://stackoverflow.com/questions/4482686/check-synchronously-if-file-directory-exists-in-node-js
+    https://www.w3schools.com/nodejs/nodejs_filesystem.asp
+manejo de señales https://stackoverflow.com/questions/42450501/catching-sigterm-vs-catching-sigint
+
