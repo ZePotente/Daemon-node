@@ -29,8 +29,12 @@ if (process.argv[2] !== 'daemon') {
 	}
 	//else, fork (revisar)
 	// Hace un fork para el daemon y termina
-	const child = childProcess.execFile(process.argv[0], [__filename, 'daemon']);
-	//const child = childProcess.fork(__filename, ['daemon']);
+	//const child = childProcess.execFile(process.argv[0], [__filename, 'daemon']);
+	const child = childProcess.fork(__filename, ['daemon'], {
+		cwd: '/',
+		detached: true,
+		stdio: 'ignore'
+	});
 	process.exit();
 } else{
 	//--Handler de señales--
@@ -42,10 +46,9 @@ if (process.argv[2] !== 'daemon') {
   	process.on('SIGTERM', handle);
   	process.on('SIGHUP', handle);
   	//-- --
-
-	//El hijo crea el pidfile
+  	//El hijo crea el pidfile
+	process.umask(0o022);
 	crearPidfile(pidfullpath);
-	
 	//Revisa la carpeta de log
 	if (!fs.existsSync(logpath.dir)) {
 		fs.mkdirSync(logpath.dir, { recursive: true });
