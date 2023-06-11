@@ -1,9 +1,24 @@
 ponerle nombre
+verificar el pidfile antes de correr
 doble fork https://stackoverflow.com/a/7911144
 salida (y demás) a paths estándar (no tiene terminal)
-¿cambiar pwd? https://stackoverflow.com/a/9956571
+¿cambiar pwd (cwd)? https://stackoverflow.com/a/9956571
+manejo de señales https://stackoverflow.com/questions/42450501/catching-sigterm-vs-catching-sigint
+
+Recursos
+https://nodejs.org/api/child_process.html
+https://superuser.com/questions/454449/linux-alternative-places-where-to-store-pid-file-instead-of-var-run
+https://stackoverflow.com/questions/12809068/create-an-empty-file-in-node-js
+https://stackoverflow.com/questions/2496710/writing-to-files-in-node-js
+https://www.w3schools.com/nodejs/nodejs_filesystem.asp
+
+https://stackoverflow.com/questions/42450501/catching-sigterm-vs-catching-sigint
+https://stackoverflow.com/questions/7910454/forking-in-nodejs/
+
+
+Hecho
 pidfile (ver qué hacer si ya existe) 
     https://stackoverflow.com/questions/4482686/check-synchronously-if-file-directory-exists-in-node-js
     https://www.w3schools.com/nodejs/nodejs_filesystem.asp
-manejo de señales https://stackoverflow.com/questions/42450501/catching-sigterm-vs-catching-sigint
+moverlo a /usr/local/bin
 
