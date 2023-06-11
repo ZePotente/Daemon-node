@@ -2,21 +2,24 @@ const fs = require('fs');
 const path = require('path');
 const childProcess = require('child_process');
 
+//Paths estándar de logs
 const logpath = {'dir':'/var/log/daemond/', 'file':'daemond.log'};
-const pidpath = {'dir':'/var/run/daemond/', 'file':'daemond.pid'};
-
 const logfullpath = path.join(logpath.dir, logpath.file);
+//Paths estándar de pidfiles
+const pidpath = {'dir':'/var/run/daemond/', 'file':'daemond.pid'};
 const pidfullpath = path.join(pidpath.dir, pidpath.file);
 
+//Crea un pidfile en el lugar correcto, y escribe el pid del proceso
+//process.pid.toString() porque sólo acepta strings, no números
 function crearPidfile(fullpath) {
 	fs.writeFile(fullpath, process.pid.toString(), function (err) {
   		if (err) throw err;
 	});
 }
 
-//TODO primero chequear si es daemon y saltear todo esto
+//Verifica si el proceso es el padre o el daemon
 if (process.argv[2] !== 'daemon') {
-	//Es el padre
+	// Es el padre
 	// Verificación del pidfile para saber si ya hay un daemon corriendo
 	if (!fs.existsSync(pidpath.dir)) {
 		fs.mkdirSync(pidpath.dir, { recursive: true });
@@ -25,11 +28,21 @@ if (process.argv[2] !== 'daemon') {
 		process.exit();
 	}
 	//else, fork (revisar)
-	// Crea un nuevo proceso ejecutando el mismo script con la opción --daemon y sudoku
+	// Hace un fork para el daemon y termina
 	const child = childProcess.execFile(process.argv[0], [__filename, 'daemon']);
 	//const child = childProcess.fork(__filename, ['daemon']);
 	process.exit();
 } else{
+	//--Handler de señales--
+	function handle(codigo) {
+		fs.unlinkSync(pidfullpath);
+    	process.exit();
+	}
+	process.on('SIGINT', handle);
+  	process.on('SIGTERM', handle);
+  	process.on('SIGHUP', handle);
+  	//-- --
+
 	//El hijo crea el pidfile
 	crearPidfile(pidfullpath);
 	
@@ -46,51 +59,3 @@ if (process.argv[2] !== 'daemon') {
 		});
 	});
 }
-
-/*
-// TODO: Si ya está corriendo uno, termina, sino crea el pidfile y sigue
-fs.writeFile(pidfullpath, process.pid.toString(), function (err) {
-  		if (err) throw err;
-	});
-*/
-
-
-/*
-const ping = childProcess.spawn('/usr/bin/ping', ['www.google.com']);
-ping.stdout.on('data', (data) => {
-	fs.appendFile(__dirname + '/' + logfn, `${data}`, function (err) {
-		if (err) throw err;
-	});
-});
-*/
-/*
-// Define la función que se ejecutará en el daemon
-function daemonFunction() {
-  	// Lógica del daemon
-    fs.appendFile(__dirname + '/' + logfn, 'hola\n', function (err) {
-  		if (err) throw err;
-	});
-}
-
-
-// Verifica si el proceso actual es el daemon o el proceso padre
-//console.log(process.argv);
-if (process.argv[2] === 'daemon') {
-	// Ejecuta la función del daemon en un bucle infinito
-	//process.chdir('/');
-	
-	fs.writeFile(path.join(pidpath.dir, pidpath.file), process.pid.toString(), function (err) {
-  		if (err) throw err;
-	});
-	//daemonFunction();
-	setInterval(daemonFunction, 1000);
-} else {
-	// Crea un archivo de marcador para indicar que el daemon está en ejecución
-	//fs.writeFileSync(path.join(dirname, 'daemon.marker'), '');
-
-	// Crea un nuevo proceso ejecutando el mismo script con la opción --daemon
-	const child = childProcess.execFile(process.argv[0], [__filename, 'daemon']);
-	//const child = childProcess.fork(__filename, ['daemon']);
-    process.exit();
-}
-*/

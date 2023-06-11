@@ -1,10 +1,11 @@
 ponerle nombre
-verificar el pidfile antes de correr
-doble fork https://stackoverflow.com/a/7911144
+"doble fork" https://stackoverflow.com/a/7911144
 salida (y demás) a paths estándar (no tiene terminal)
+cambiar el umask
 ¿cambiar pwd (cwd)? https://stackoverflow.com/a/9956571
-manejo de señales https://stackoverflow.com/questions/42450501/catching-sigterm-vs-catching-sigint
+cerrar los fd (file descriptors)
 
+daemonctl start, stop, restart
 Recursos
 https://nodejs.org/api/child_process.html
 https://superuser.com/questions/454449/linux-alternative-places-where-to-store-pid-file-instead-of-var-run
@@ -21,4 +22,6 @@ pidfile (ver qué hacer si ya existe)
     https://stackoverflow.com/questions/4482686/check-synchronously-if-file-directory-exists-in-node-js
     https://www.w3schools.com/nodejs/nodejs_filesystem.asp
 moverlo a /usr/local/bin
+verificar el pidfile antes de correr
+manejo de señales https://stackoverflow.com/questions/42450501/catching-sigterm-vs-catching-sigint
 
